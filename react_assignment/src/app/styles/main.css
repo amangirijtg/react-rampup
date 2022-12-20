@@ -1,0 +1,8 @@
+.inputBox {
+  margin: 3% 20% 3% 20%;
+  display: flex;
+  justify-content: center;
+}
+.inputBox input {
+  border-color: black ;
+}
