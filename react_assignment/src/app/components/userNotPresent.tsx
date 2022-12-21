@@ -2,7 +2,6 @@ import { Link, useLocation } from "react-router-dom"
 
 const UserNotPresent = () => {
     const location = useLocation()
-    console.log(location)
     return (
         <div className="col px-md-5">
             <div className="p-3 border bg-light mt-4">Username: {location.state.user} does not exist</div>

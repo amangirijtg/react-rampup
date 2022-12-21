@@ -1,7 +1,8 @@
 import axios from 'axios'
+import { GITHUB_URL } from '../constants/constants';
 
-const getUserDetails = async (username: string) => {
-    const res = await axios.get(`https://api.github.com/users${username}`);
+const getUserDetails = (username: string) => {
+    const res = axios.get(`${GITHUB_URL}${username}`);
     return res;
 }
 export default getUserDetails

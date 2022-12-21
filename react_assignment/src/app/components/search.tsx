@@ -1,41 +1,42 @@
-import { useState, BaseSyntheticEvent, useEffect } from "react"
+import { useState, BaseSyntheticEvent } from "react"
 import getUserDetails from "../services/getUserDetails"
-import { useLocation, useNavigate, Link } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
+import { UserType } from "../interfaces/userInterface"
+import { ROUTE_PATHS } from "../constants/constants"
 
 const Search = () => {
-    const demoUserInfo = {
-        username: '',
-        avatar_url: '',
-    };
-    const [userInfo, setUserInfo] = useState(demoUserInfo)
+    const demoUserData: UserType = {
+        avatar_url: "https://avatars.githubusercontent.com/u/97114554?v=4",
+        login: "",
+        username: "",
+        location: "",
+        followers: 0,
+        following: 0,
+        bio: "",
+        html_url: "",
+        email: ""
+    }
+    const [userInfo, setUserInfo] = useState(demoUserData)
     const [username, setUsername] = useState('')
     const navigate = useNavigate();
-    const location = useLocation();
     const [previewUserDetails, setpreviewUserDetails] = useState(false)
     const handleEvent = (event: BaseSyntheticEvent) => {
         setUsername(event.target.value)
     };
-    const getDetails = async () => {
-
+    const getDetails = () => {
         if(username === '') {
             alert("Enter User Name");
         }
-        await getUserDetails(`/${username}`).then(
+        getUserDetails(username).then(
             function(data) {
+                setUserInfo(data.data)
                 setpreviewUserDetails(true);
-                location.state = {user_data: data.data}
-                let userData= {
-                    username: location.state.user_data.login, 
-                    avatar_url: location.state.user_data.avatar_url
-                }
-                setUserInfo(userData)
-                // navigate(`/${username}`, {state: {user_data: data.data}});
             }, function() {
-                navigate('/not-found', {state: {user: username}})
+                navigate(ROUTE_PATHS.notFound, {state: {user: username}})
             });
     }
     const showUserDetails = () => {
-        navigate(`/${location.state.user_data.login}`, {state:{user_data: location.state.user_data}})
+        navigate(`/${userInfo.login}`, {state:{user_data: userInfo}})
     }
     return (
         <> 
@@ -48,7 +49,7 @@ const Search = () => {
                 <div className="card" style={{width: "18rem"}}>
                     <img className="card-img-top" src={userInfo.avatar_url} alt="User Profile Pic" />
                     <div className="card-body">
-                        <h5 className="card-title">{userInfo.username}</h5>
+                        <h5 className="card-title">{userInfo.login}</h5>
                     </div>
                     <button className="card-body btn btn-outline-primary" onClick={showUserDetails}>
                         View more details
